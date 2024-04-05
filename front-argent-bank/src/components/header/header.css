@@ -1,0 +1,26 @@
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+.headerWrapper {
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+.headerWrapper img {
+  width: 15%;
+}
+.headerWrapper .sign {
+  display: flex;
+  align-items: center;
+}
+.headerWrapper .sign a {
+  color: #303d4e;
+  text-decoration: none;
+}
+.headerWrapper .sign .userIcon {
+  margin-right: 5px;
+  width: 20px;
+}/*# sourceMappingURL=header.css.map */

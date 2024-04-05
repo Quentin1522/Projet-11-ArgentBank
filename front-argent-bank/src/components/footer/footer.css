@@ -1,0 +1,13 @@
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+.footerWrapper {
+  margin: 20px 0;
+}
+.footerWrapper p {
+  margin-top: 20px;
+  text-align: center;
+}/*# sourceMappingURL=footer.css.map */
