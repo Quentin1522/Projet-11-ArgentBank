@@ -2,12 +2,21 @@
   padding: 0px;
   margin: 0px;
   box-sizing: border-box;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
 }
 
 .footerWrapper {
-  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  border-top: 2px solid #ccc;
+  padding: 2rem 0 1.5rem;
 }
-.footerWrapper p {
-  margin-top: 20px;
+.footerWrapper .contentFooter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.footerWrapper .contentFooter p {
+  color: #2c3e50;
   text-align: center;
 }/*# sourceMappingURL=footer.css.map */

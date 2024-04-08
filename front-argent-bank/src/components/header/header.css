@@ -2,6 +2,7 @@
   padding: 0px;
   margin: 0px;
   box-sizing: border-box;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
 }
 
 .headerWrapper {
@@ -10,7 +11,11 @@
   justify-content: space-between;
 }
 .headerWrapper img {
-  width: 15%;
+  width: 45%;
+}
+.headerWrapper p {
+  font-weight: bold;
+  color: #2c3e50;
 }
 .headerWrapper .sign {
   display: flex;

@@ -3,8 +3,9 @@ import "../footer/footer.scss";
 const Footer = () => {
     return (
         <div className="footerWrapper">
-            <hr></hr>
-            <p>Copyright 2020 Argent Bank</p>
+            <div className="contentFooter">
+                <p>Copyright 2020 Argent Bank</p>
+            </div>
         </div>
     );
 };

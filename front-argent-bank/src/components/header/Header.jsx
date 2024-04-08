@@ -1,15 +1,17 @@
 import "../header/header.scss";
-import { NavLink } from 'react-router-dom';
 import Logo from "../../assets/argentBankLogo.png"
 import User from "../../assets/user.svg";
+import { Link } from 'react-router-dom';
+
+
 
 const Header = () => {
     return (
         <div className="headerWrapper">
-            <img src={Logo} alt="logo argent bank"/>
+            <Link to="/Home"><img src={Logo} alt="logo argent bank"/></Link>
             <div className="sign">
                 <img className="userIcon" src={User} alt="user icon"/>
-                <NavLink to="/signIn">Sign In</NavLink>
+                <Link to="/signIn"><p>Sign In</p></Link>
             </div>
         </div>
     );

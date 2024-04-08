@@ -1,12 +1,16 @@
+import "../src/app.scss";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from "../src/page/home/Home.jsx";
 import SignIn from "../src/page/singIn/SignIn.jsx";
+import User from "./page/user/User.jsx";
+
 const App = () => {
   return (
     <BrowserRouter>
-     <Routes>
+      <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/" element={<SignIn />} />
+        <Route path="/signIn" element={<SignIn />} />
+        <Route path="/user" element={<User />} />
       </Routes>
     </BrowserRouter>
   );
