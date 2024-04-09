@@ -42,3 +42,15 @@
         }
     }
 }
+
+@media (max-width: 720px) {
+    .featuresWrapper{
+        height: auto;
+        flex-direction: column;
+        gap: 100px;
+
+        .featuresContent:last-child{
+            margin-bottom: 70px;
+        }
+    }
+}

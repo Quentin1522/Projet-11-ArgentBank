@@ -10,6 +10,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   height: 40vh;
+  width: 100%;
   position: relative;
 }
 .heroWrapper .textHero {
@@ -24,5 +25,20 @@
   margin: 0 auto;
 }
 .heroWrapper .textHero p {
+  color: #2c3e50;
   font-size: 1.2rem;
+}
+
+@media (max-width: 720px) {
+  .heroWrapper {
+    height: 30vh;
+    background-position: 0px;
+  }
+  .heroWrapper .textHero {
+    font-size: 12px;
+    width: 70%;
+    height: 200px;
+    top: 2rem;
+    left: -1%;
+  }
 }/*# sourceMappingURL=hero.css.map */

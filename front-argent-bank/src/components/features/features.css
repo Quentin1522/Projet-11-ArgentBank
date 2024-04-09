@@ -36,4 +36,15 @@
   text-align: center;
   width: 350px;
   margin-top: 15px;
+}
+
+@media (max-width: 720px) {
+  .featuresWrapper {
+    height: auto;
+    flex-direction: column;
+    gap: 100px;
+  }
+  .featuresWrapper .featuresContent:last-child {
+    margin-bottom: 70px;
+  }
 }/*# sourceMappingURL=features.css.map */

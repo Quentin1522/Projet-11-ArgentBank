@@ -6,6 +6,7 @@
 }
 
 .headerWrapper{
+    width: 100%;
     padding: 5px;
     display: flex;
     justify-content: space-between;
@@ -31,6 +32,29 @@
         .userIcon{
             margin-right: 5px;
             width: 20px;
+        }
+
+        .iconSignOut{
+            width: 15px;
+            margin-left: 10px;
+            margin-right: 5px;
+        }
+    }
+
+    .sign-up-icone{
+        width: 10%;
+    }
+}
+
+@media (max-width: 720px) {
+    .headerWrapper{
+
+        img{
+            width: 65%;
+        }
+
+        p{
+            width: 70px;
         }
     }
 }
