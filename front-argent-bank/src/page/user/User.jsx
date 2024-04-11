@@ -6,14 +6,15 @@ import Account from "../../components/account/Account";
 import Footer from "../../components/footer/Footer";
 
 
-const User = () => {
+const User = ({accountData}) => {
 
     return (
         <div className="userWrapper">
             <Header imgSignOut={signOut} textSignOut="sign Out"/>
             <div className="userContent">
                 <UserName/>
-                <Account/>
+                {/*accountData en props*/}
+                <Account accountData={accountData}/>
             </div>
             <Footer/>
         </div>

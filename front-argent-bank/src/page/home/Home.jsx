@@ -4,12 +4,12 @@ import Hero from "../../components/hero/Hero";
 import Features from "../../components/features/Features";
 import Footer from "../../components/footer/Footer";
 
-const Home = () => {
+const Home = ({featuresData}) => {
     return (
         <div className="homeWrapper">
             <Header/>
             <Hero/>
-            <Features/>
+            <Features featuresData={featuresData} />
             <Footer/>
         </div>
     );

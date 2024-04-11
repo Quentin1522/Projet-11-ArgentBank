@@ -50,18 +50,18 @@
     background-color: #00bc77;
     color: #fff;
   }
-}
+} 
 
 @media (min-width: 720px) {
-    .account {
-      flex-direction: row;
-    }
-  
-    .account-content-wrapper.cta {
-      flex: 0;
-    }
-  
-    .transaction-button {
-      width: 200px;
-    }
+  .account {
+    flex-direction: row;
   }
+
+  .account-content-wrapper.cta {
+    flex: 0;
+  }
+
+  .transaction-button {
+    width: 200px;
+  }
+}
