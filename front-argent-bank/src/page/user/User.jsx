@@ -4,6 +4,7 @@ import UserName from "../../components/userName/UserName";
 import signOut from "../../assets/icon-sign-out.svg";
 import Account from "../../components/account/Account";
 import Footer from "../../components/footer/Footer";
+import EditName from "../../components/editName/editName";
 
 
 const User = ({accountData}) => {
@@ -12,6 +13,7 @@ const User = ({accountData}) => {
         <div className="userWrapper">
             <Header imgSignOut={signOut} textSignOut="sign Out"/>
             <div className="userContent">
+            <EditName/>
                 <UserName/>
                 {/*accountData en props*/}
                 <Account accountData={accountData}/>

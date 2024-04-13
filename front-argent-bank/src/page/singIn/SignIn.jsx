@@ -16,15 +16,34 @@ const SignIn = () => {
     //états locaux pour stocker les valeurs des champs du formaulaire
     const [username, setUsername] = useState(''); //vide pour stocker la valeur
     const [password, setPassword] = useState(''); //vide pour stocker la valeur
+    const [usernameError, setUsernameError] = useState('');
+    const [passwordError, setpasswordError] = useState('');
 
     //fonction de gestion de la soumission du formulaire
     const handleSubmit = (e) => {
         //empêche le comportement par défaut de soumission du formulaire
         e.preventDefault();
-    }
+
+        //vérification du nom d'utilisateur
+        if(!username){
+            setUsernameError('Username is required');
+            return;
+        }
+
+        //vérification du mot de passe
+        if(!password){
+            setpasswordError('Passoword is required');
+            return;
+        }
+
+        //si les deux chamaps sont remplis, réinitialise les erreurs
+        //et envoie les informations d'indentifications à Redux
+        setUsername('');
+        setPassword('');
 
     //envoie les informationsd'identifications de l'utilisateur à l'action Redux
     dispatch(loginUser({username, password}));
+    }
 
     return (
         <div className="signInWrapper">
