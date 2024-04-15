@@ -1,10 +1,12 @@
 import "../userName/userName.scss";
 
-const UserName = () => {
+const UserName = ({onEditClick}) => {
     return (
         <div className="userNameWrapper">
                 <h1>Welcome back <br/> Tony Jarvis!</h1>
-                <button className="edit-button">Edit Name</button>
+
+                {/*ajout d'un gestionnaire d'évenement onClick qui déclanche la fonction de basculement*/}
+                <button className="edit-button" onClick={onEditClick}>Edit Name</button>
         </div>
     );
 };

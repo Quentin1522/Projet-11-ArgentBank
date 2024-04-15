@@ -6,14 +6,20 @@ const editName = () => {
             <h3>Edit user info</h3>
             <form>
 
-                <label htmlFor="username">User Name :</label>
-                <input type="text" id="username" />
+                <div className="inputContent">
+                    <label htmlFor="username">User Name :</label>
+                    <input type="text" id="username" />
+                </div>
 
-                <label htmlFor="firstname">First Name : </label>
-                <input type="text" id="firstname" />
+                <div className="inputContent">
+                    <label htmlFor="firstname">First Name : </label>
+                    <input type="text" id="firstname" />
+                </div>
 
-                <label htmlFor="lastname">Last Name :</label>
-                <input type="text" id="lastname" />
+                <div className="inputContent">
+                    <label htmlFor="lastname">Last Name :</label>
+                    <input type="text" id="lastname" />
+                </div>
 
                 <div className="buttonContainer">
                     <button className="save">Save</button>
