@@ -6,11 +6,6 @@ import { Link, useLocation } from 'react-router-dom';
 
 const Header = (props) => {
 
-    //useLocation() pour obtenir l'url actuelle
-    const location = useLocation();
-
-    //vérifie si l'url actuelle correspond ) "/user"
-    const isUserPage = location.pathname === "/user";
 
     return (
         <div className="headerWrapper">
@@ -20,12 +15,10 @@ const Header = (props) => {
                 <Link to="/signIn"><p>Sign In</p></Link>
 
                 {/*affichage les élément props (icone signOut et text signOut) uniquement si c'est la page user*/}
-                {isUserPage &&(
                         <>
                             <img className="iconSignOut" src={props.imgSignOut} alt="icone sing-out"/>
                             <Link to="/home"><p>Sign Out</p></Link>
                         </>
-                )}
             </div>
         </div>
     );

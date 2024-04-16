@@ -6,7 +6,7 @@ import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer"
 
 //redux
-import { loginUser } from "../../redux/authActions";
+import {loginUser} from "../../redux/authActions";
 import {useDispatch} from 'react-redux';
 
 const SignIn = () => {
@@ -17,10 +17,10 @@ const SignIn = () => {
     const [username, setUsername] = useState(''); //vide pour stocker la valeur
     const [password, setPassword] = useState(''); //vide pour stocker la valeur
     const [usernameError, setUsernameError] = useState('');
-    const [passwordError, setpasswordError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
 
     //fonction de gestion de la soumission du formulaire
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         //empêche le comportement par défaut de soumission du formulaire
         e.preventDefault();
 
@@ -32,8 +32,33 @@ const SignIn = () => {
 
         //vérification du mot de passe
         if(!password){
-            setpasswordError('Passoword is required');
+            setPasswordError('Passoword is required');
             return;
+        }
+
+        try{
+            //envoie de la requête ) l'API pour obtenir le token
+            const response = await fetch('http://localhost:3001/api/v1/user/login',{
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json',
+                },
+                body: JSON.stringify({username, password}),
+            });
+
+            if (response.ok){
+                const data = await response.json();
+                const token = data.token;
+
+                //disâtch de l'action loginUser avec le token obtenu
+                dispatch(loginUser({token}));
+            } else {
+                //traiter les erreurs ici
+                console.error('ERROR logging in :', response.statusText);
+            }
+        } catch (error) {
+            //traiter les erreurs ici
+            console.error('ERROR logging in :', error);
         }
 
         //si les deux chamaps sont remplis, réinitialise les erreurs
