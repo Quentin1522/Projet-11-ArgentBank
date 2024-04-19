@@ -2,11 +2,10 @@ import "../user/user.scss";
 import { useState } from "react";
 import Header from "../../components/header/Header";
 import UserName from "../../components/userName/UserName";
-import signOut from "../../assets/icon-sign-out.svg";
+import signOut from "../../assets/sign-out.svg";
 import Account from "../../components/account/Account";
 import Footer from "../../components/footer/Footer";
 import EditName from "../../components/editName/editName";
-
 
 const User = ({accountData}) => {
 
@@ -20,7 +19,9 @@ const User = ({accountData}) => {
 
     return (
         <div className="userWrapper">
+            {/*prop pour indiquer que le lien "SignOut" doit être */}
             <Header imgSignOut={signOut} textSignOut="sign Out"/>
+
             <div className="userContent">
 
                 {/*condition pour affihcer le composant "editName" ou "UserName" en fonction de l'état*/}   

@@ -1,33 +1,29 @@
-//actions pour l'authentification utilisateur
+// authActions.js
+
+// Importe les actions loginUserSuccess et loginUserFailure du slice authSlice
 import { loginUserSuccess, loginUserFailure } from './authSlice';
 
-//action pour connecter l'utilisateur
+// Définit l'action loginUser, qui envoie une requête pour connecter l'utilisateur
 export const loginUser = (userData) => {
-    return async (dispatch) => {
-        try {
-            //effectue une requête HTTP POST vers l'API pour la connexion
-            const response = await fetch('http://localhost:3001/api/v1/user/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userData),
-            });
-            if (response.ok) {
-                //si la requête est réussie, récupère les données de l'utilisateur et le token
-                const data = await response.json();
-                const token = data.token;
-
-                //dispatch l'action de connexion réussie avec les données de l'utilisateur et le token
-                dispatch(loginUserSuccess({user: data.user, token}));
-            } else {
-                //si la requête échoue, dispatch l'action de connexion échouéavec un message d'erreur
-                dispatch(loginUserFailure('Invalid credentials'));
-            }
-        } catch (error) {
-            //en cas d'erreur, dispatch l'action de connexion échouée avec un message d'erreur générique
-            console.error('Error logging in:', error);
-            dispatch(loginUserFailure('An error occurred'));
-        }
-    };
+  return async (dispatch) => { // Fonction asynchrone qui reçoit dispatch comme argument
+    try {
+      const response = await fetch('http://localhost:3001/api/v1/user/login', { // Effectue une requête HTTP POST
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData), // Envoie les données de l'utilisateur au format JSON
+      });
+      if (response.ok) { // Si la requête est réussie (code de statut 200-299)
+        const data = await response.json(); // Extrait les données JSON de la réponse
+        const token = data.token; // Extrait le token d'authentification de la réponse
+        dispatch(loginUserSuccess({ user: data.user, token })); // Dispatch l'action loginUserSuccess avec les données de l'utilisateur et le token
+      } else { // Si la requête échoue
+        dispatch(loginUserFailure('Invalid credentials')); // Dispatch l'action loginUserFailure avec un message d'erreur
+      }
+    } catch (error) { // En cas d'erreur lors de la requête
+      console.error('Error logging in:', error); // Affiche l'erreur dans la console
+      dispatch(loginUserFailure('An error occurred')); // Dispatch l'action loginUserFailure avec un message d'erreur générique
+    }
+  };
 };

@@ -22,29 +22,20 @@
         color: #2c3e50;
     }
 
-    .sign{
+    .sign, .signOut{
         display: flex;
         align-items: center;
 
+        img{
+            width: 25px;
+        }
+
         a{
-            color: #303d4e;
             text-decoration: none;
+            color: #2c3e50;
+            margin-left: 5px;
+            margin-right: 15px;
         }
-
-        .userIcon{
-            margin-right: 5px;
-            width: 20px;
-        }
-
-        .iconSignOut{
-            width: 15px;
-            margin-left: 10px;
-            margin-right: 5px;
-        }
-    }
-
-    .sign-up-icone{
-        width: 10%;
     }
 }
 

@@ -54,4 +54,14 @@
   width: 45%;
   background-color: #00bc77;
   color: #fff;
+}
+
+@media (max-width: 720px) {
+  .editNameWrapper {
+    width: 90%;
+    padding-top: 10px;
+  }
+  .editNameWrapper form {
+    padding: 30px;
+  }
 }/*# sourceMappingURL=editName.css.map */

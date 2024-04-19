@@ -9,6 +9,7 @@ const LOGOUT = 'auth/logout';
 const initialState = {
     isAuthenticated: false,
     user: null,
+    token: null,
     error: null
 };
 
@@ -20,6 +21,7 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isAuthenticated: true,
+                token: action.payload.token,
                 user: action.payload,
                 error: null
             };
@@ -28,6 +30,7 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isAuthenticated: false,
+                token:null,
                 user: null,
                 error: action.payload
             };
@@ -37,6 +40,7 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 isAuthenticated: false,
                 user: null,
+                token:null,
                 error: null
             };
         default:

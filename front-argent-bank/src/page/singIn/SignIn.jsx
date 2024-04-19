@@ -1,104 +1,72 @@
 import { useState } from "react";
 import "../singIn/singIn.scss";
-import { Link } from 'react-router-dom';
 import User from "../../assets/user.svg";
 import Header from "../../components/header/Header";
-import Footer from "../../components/footer/Footer"
-
-//redux
-import {loginUser} from "../../redux/authActions";
-import {useDispatch} from 'react-redux';
+import Footer from "../../components/footer/Footer";
+// Redux
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../../redux/authActions';
 
 const SignIn = () => {
-    //initalise useDispatch pour envoyer des actions redux
     const dispatch = useDispatch();
+    const [error, setError] = useState(''); // État local pour stocker les erreurs de connexion
 
-    //états locaux pour stocker les valeurs des champs du formaulaire
-    const [username, setUsername] = useState(''); //vide pour stocker la valeur
-    const [password, setPassword] = useState(''); //vide pour stocker la valeur
-    const [usernameError, setUsernameError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
+    // Gestionnaire d'événement pour la soumission du formulaire de connexion
+    const handleLoginSubmit = async (event) => {
+        event.preventDefault();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
 
-    //fonction de gestion de la soumission du formulaire
-    const handleSubmit = async (e) => {
-        //empêche le comportement par défaut de soumission du formulaire
-        e.preventDefault();
-
-        //vérification du nom d'utilisateur
-        if(!username){
-            setUsernameError('Username is required');
-            return;
-        }
-
-        //vérification du mot de passe
-        if(!password){
-            setPasswordError('Passoword is required');
-            return;
-        }
-
-        try{
-            //envoie de la requête ) l'API pour obtenir le token
-            const response = await fetch('http://localhost:3001/api/v1/user/login',{
-                method : 'POST',
-                headers : {
-                    'Content-Type' : 'application/json',
-                },
-                body: JSON.stringify({username, password}),
+        try {
+            const response = await fetch('http://localhost:3001/api/v1/user/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
             });
 
-            if (response.ok){
-                const data = await response.json();
-                const token = data.token;
-
-                //disâtch de l'action loginUser avec le token obtenu
-                dispatch(loginUser({token}));
-            } else {
-                //traiter les erreurs ici
-                console.error('ERROR logging in :', response.statusText);
+            if (!response.ok) {
+                throw new Error(`HTTP error, status = ${response.status}`);
             }
+
+            const data = await response.json();
+
+            // Stocke le token dans le localStorage
+            localStorage.setItem('token', data.token);
+
+            // Dispatch de l'action loginUser avec les données de l'utilisateur
+            dispatch(loginUser(data));
+
+            // Redirection vers la page utilisateur après la connexion réussie
+            window.location.href = '/user';
         } catch (error) {
-            //traiter les erreurs ici
-            console.error('ERROR logging in :', error);
+            // Si une erreur se produit lors de la connexion, affiche un message d'erreur
+            console.error("Login failed:", error);
+            setError("L'adresse mail ou le mot de passe n'est pas correct.");
         }
-
-        //si les deux chamaps sont remplis, réinitialise les erreurs
-        //et envoie les informations d'indentifications à Redux
-        setUsername('');
-        setPassword('');
-
-    //envoie les informationsd'identifications de l'utilisateur à l'action Redux
-    dispatch(loginUser({username, password}));
-    }
+    };
 
     return (
         <div className="signInWrapper">
-            <Header/>
+            <Header />
             <div className="formContainer">
                 <div className="formWrapper">
-                    <img className="userIcon" src={User} alt="icon user"/>
+                    <img className="userIcon" src={User} alt="icon user" />
                     <h1>Sign In</h1>
-                    <form>
-
-                    <div className="input-wrapper">
-                        <label htmlFor="username">Username</label>
-                        <input type="text" id="username" />
-                    </div>
-
-                    <div className="input-wrapper">
-                        <label htmlFor="password">Password</label>
-                        <input type="password" id="password" />
-                    </div>
-
-                    <div className="input-remember">
-                        <input type="checkbox" id="remember-me" />
-                        <label htmlFor="remember-me">Remember me</label>
-                    </div>
-
-                    <Link className="sign-in-button" to="/user"><p>Sign In</p></Link>
+                    <form onSubmit={handleLoginSubmit}>
+                        <div className="input-wrapper">
+                            <label htmlFor="email">Email</label>
+                            <input type="text" id="email" />
+                        </div>
+                        <div className="input-wrapper">
+                            <label htmlFor="password">Password</label>
+                            <input type="password" id="password" />
+                        </div>
+                        <button type="submit" className="sign-in-button">Sign In</button>
                     </form>
+                    {error && <div className="errorForm">{error}</div>} {/* Affiche l'erreur si elle est définie */}
                 </div>
             </div>
-            <Footer className="footer"/>
+            <Footer className="footer" />
         </div>
     );
 };

@@ -10,7 +10,8 @@ import rootReducer from "./redux/reducer.js";
 //configure le store Redux avec le rootReducer
 const store = configureStore({
     reducer: rootReducer,
-    devTools: true,
+    //active devtools uniquement en mode développeur
+    devTools: process.env.NODE_ENV !== 'production',
 });
 
 createRoot(document.getElementById('root')).render(
