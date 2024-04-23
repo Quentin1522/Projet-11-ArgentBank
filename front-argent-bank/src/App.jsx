@@ -5,6 +5,7 @@ import FeaturesDate from "./data/features.json";
 import Home from "../src/page/home/Home.jsx";
 import SignIn from "../src/page/singIn/SignIn.jsx";
 import User from "./page/user/User.jsx";
+import Profile from "./page/profile/profile.jsx"
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <Route path="/" element={<Home featuresData={FeaturesDate} />} />
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/user" element={<User accountData={AccountData} />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );
