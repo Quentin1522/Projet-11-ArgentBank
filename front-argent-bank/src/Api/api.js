@@ -43,7 +43,11 @@ export async function fetchUserProfile(token) {
                 'Content-Type': 'application/json'
             }
         });
-        return await processResponse(response);
+        if (response.headers.get("content-type").includes("application/json")) {
+            return await response.json();
+        } else {
+            throw new Error("La réponse n'est pas du JSON");
+        }
     } catch (error) {
         console.error('Erreur API lors de la récupération du profil :', error);
         throw error;
