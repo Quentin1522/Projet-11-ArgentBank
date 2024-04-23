@@ -1,41 +1,24 @@
-const profile = (userData) => {
+import { useSelector } from 'react-redux';
+import "../profile/profile.scss";
 
-    //fonction pour récupérer les données du profil utilisateur depuis l'API
-    async function fetchUserProfile() {
-        try {
-            const response = await fetch('http://localhost:3001/api/v1/user/profile', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": `Bearer ${token}`,
-                },
-            });
-        if (!responce.ok) {
-            throw new Error('Failed to fetch user profile');
-        }
+const Profile = () => {
+    const user = useSelector(state => state.auth.user);  // Assumons que les détails de l'utilisateur se trouvent ici
 
-        const userProfilData = await response.json();
-        //retourne les données du profil utilisateur
-        return userProfilData;
-    } catch (error) {
-        console.error ('Error fetching user profile :', error);
-        //lance une nouvelle erreur pour la gérer à un niveau supérieur si nécessaire
-        throw error; 
+    if (!user) {
+        return <div>Loading user information...</div>;
     }
-}
-
-    //userData contient les informations du profil de l'utilisateur
-    const {name, email} = userData;
     
     return (
-        <div className="profile">
-            <h2>Profile</h2>
-            <div>
-                <p>Nom :{name}</p>
-                <p>Email : {email}</p>
+        <div className="profile-container">
+            <h1>Profile Information</h1>
+            <div className="profile-details">
+                <p><strong>Name:</strong> {user.name}</p>
+                <p><strong>Email:</strong> {user.email}</p>
+                {/* D'autres informations de profil peuvent être ajoutées ici si disponibles */}
             </div>
+            <button>Edit Profile</button> {/* Bouton d'édition, implémentation à ajouter */}
         </div>
     );
 };
 
-export default profile;
+export default Profile;

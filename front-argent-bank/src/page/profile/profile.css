@@ -1,0 +1,17 @@
+.profile-container {
+  padding: 20px;
+  margin: auto;
+  width: 60%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+.profile-container h1 {
+  text-align: center;
+}
+.profile-container .profile-details {
+  margin-top: 20px;
+}
+.profile-container .profile-details p {
+  font-size: 16px;
+  line-height: 1.6;
+}/*# sourceMappingURL=profile.css.map */

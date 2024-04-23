@@ -1,47 +1,46 @@
 import { useState } from "react";
 import "../singIn/singIn.scss";
 import User from "../../assets/user.svg";
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { loginUser as apiLoginUser, fetchUserProfile } from '../../Api/api';  // Si la fonction fetchUserProfile est disponible et nécessaire
+import { loginUserSuccess } from '../../redux/slice';
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
-// Redux
-import { useDispatch } from 'react-redux';
-import { loginUser } from '../../redux/authActions';
 
 const SignIn = () => {
     const dispatch = useDispatch();
-    const [error, setError] = useState(''); // État local pour stocker les erreurs de connexion
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-    // Gestionnaire d'événement pour la soumission du formulaire de connexion
-    const handleLoginSubmit = async (event) => {
+    const onSubmit = async (event) => {
         event.preventDefault();
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
-
         try {
-            const response = await fetch('http://localhost:3001/api/v1/user/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
+            const response = await apiLoginUser({ email, password });
+            const { token } = response;
+            
+            if (!token) {
+                throw new Error("Token manquant");
+            }
+            
+            // Optionnel: Décoder le token ici si besoin ou fetcher les détails de l'utilisateur
+            localStorage.setItem('token', token);
 
-            if (!response.ok) {
-                throw new Error(`HTTP error, status = ${response.status}`);
+            // Supposons que vous aviez besoin d'aller chercher les infos utilisateur
+            try {
+                const userProfile = await fetchUserProfile(token);
+                dispatch(loginUserSuccess({ user: userProfile, token }));
+            } catch (err) {
+                console.error("Échec lors de la récupération du profil utilisateur:", err);
+                setError("Impossible de retrouver les détails de l'utilisateur.");
             }
 
-            const data = await response.json();
-
-            // Stocke le token dans le localStorage
-            localStorage.setItem('token', data.token);
-
-            // Dispatch de l'action loginUser avec les données de l'utilisateur
-            dispatch(loginUser(data));
-
-            // Redirection vers la page utilisateur après la connexion réussie
-            window.location.href = '/user';
-        } catch (error) {
-            // Si une erreur se produit lors de la connexion, affiche un message d'erreur
-            console.error("Login failed:", error);
-            setError("L'adresse mail ou le mot de passe n'est pas correct.");
+            navigate('/user');
+        } catch (err) {
+            console.error("Échec de connexion :", err);
+            setError(err.message || "L'adresse mail ou le mot de passe n'est pas correct.");
         }
     };
 
@@ -50,23 +49,35 @@ const SignIn = () => {
             <Header />
             <div className="formContainer">
                 <div className="formWrapper">
-                    <img className="userIcon" src={User} alt="icon user" />
                     <h1>Sign In</h1>
-                    <form onSubmit={handleLoginSubmit}>
+                    <img className="userIcon" src={User} alt="User icon" />
+                    <form onSubmit={onSubmit}>
                         <div className="input-wrapper">
                             <label htmlFor="email">Email</label>
-                            <input type="text" id="email" />
+                            <input
+                                type="email"
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
                         </div>
                         <div className="input-wrapper">
                             <label htmlFor="password">Password</label>
-                            <input type="password" id="password" />
+                            <input
+                                type="password"
+                                id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
                         </div>
                         <button type="submit" className="sign-in-button">Sign In</button>
                     </form>
-                    {error && <div className="errorForm">{error}</div>} {/* Affiche l'erreur si elle est définie */}
+                    {error && <div className="errorForm">{error}</div>}
                 </div>
             </div>
-            <Footer className="footer" />
+            <Footer />
         </div>
     );
 };
