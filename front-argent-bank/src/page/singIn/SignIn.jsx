@@ -3,7 +3,7 @@ import "../singIn/singIn.scss";
 import User from "../../assets/user.svg";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { loginUser as apiLoginUser, fetchUserProfile } from '../../Api/api';  // Si la fonction fetchUserProfile est disponible et nécessaire
+import { loginUser as apiLoginUser, fetchUserProfile } from '../../Api/api';
 import { loginUserSuccess } from '../../redux/slice';
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
@@ -25,10 +25,8 @@ const SignIn = () => {
                 throw new Error("Token manquant");
             }
             
-            // Optionnel: Décoder le token ici si besoin ou fetcher les détails de l'utilisateur
             localStorage.setItem('token', token);
 
-            // Supposons que vous aviez besoin d'aller chercher les infos utilisateur
             try {
                 const userProfile = await fetchUserProfile(token);
                 dispatch(loginUserSuccess({ user: userProfile, token }));

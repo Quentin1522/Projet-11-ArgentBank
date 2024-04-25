@@ -1,6 +1,8 @@
+import { loginUserSuccess, loginUserFailure } from '../redux/slice';
+import store from '../redux/store';
+
 const baseURL = 'http://localhost:3001/api/v1/user';
 
-// Fonction utilitaire pour traiter les réponses de l'API
 async function processResponse(response) {
     const data = await response.json();
     if (!response.ok) {
@@ -9,7 +11,6 @@ async function processResponse(response) {
     return data;
 }
 
-// Fonction pour gérer la connexion de l'utilisateur
 export async function loginUser(credentials) {
     try {
         const response = await fetch(`${baseURL}/login`, {
@@ -18,33 +19,45 @@ export async function loginUser(credentials) {
             body: JSON.stringify(credentials)
         });
         const processData = await processResponse(response);
-        const { token } = processData.body; // Accédez au token à travers l'objet body 
+        const { token } = processData.body;
 
         if (!token) {
-            throw new Error("Token manquant"); // Vérifiez si le token est présent
+            throw new Error("Token manquant");
         }
 
-        // Réussi, retourne le token et potentiellement décode le user depuis le token si nécessaire
-        return { user: null, token }; // Temporairement user est null si non retourné par l'API
+        // Dispatch l'action Redux avec seulement le token
+        store.dispatch(loginUserSuccess({ token }));
+
+        return { token };
     } catch (error) {
         console.error('Erreur API lors de la connexion :', error);
+        store.dispatch(loginUserFailure(error.toString()));
         throw error;
     }
 }
+
 
 
 // Fonction pour récupérer le profil de l'utilisateur
 export async function fetchUserProfile(token) {
     try {
         const response = await fetch(`${baseURL}/profile`, {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
         });
-        if (response.headers.get("content-type").includes("application/json")) {
-            return await response.json();
+
+        console.log('Response Status:', response.status);
+        console.log('Response Headers:', response.headers.get('content-type'));
+        const responseBody = await response.text();
+        console.log('Response Body:', responseBody);
+
+        if (response.headers.get("content-type")?.includes("application/json")) {
+            const data = JSON.parse(responseBody);
+            console.log("Parsed Data:", data);
+            return data;
         } else {
             throw new Error("La réponse n'est pas du JSON");
         }
@@ -53,6 +66,7 @@ export async function fetchUserProfile(token) {
         throw error;
     }
 }
+
 
 // Fonction pour simuler la déconnexion de l'utilisateur
 export function logoutUser() {

@@ -1,4 +1,3 @@
-// Importation des utilitaires nécessaires
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './slice';  // Importation du reducer combiné
 
