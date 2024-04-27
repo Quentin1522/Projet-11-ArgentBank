@@ -22,6 +22,8 @@ export async function loginUser(credentials) {
         const { token } = processData.body;
 
         if (!token) {
+            localStorage.setItem('userToken', token);  // Assurez-vous que 'userToken' est cohérent partout
+            store.dispatch(loginUserSuccess({ token }));
             throw new Error("Token manquant");
         }
 
@@ -49,14 +51,9 @@ export async function fetchUserProfile(token) {
             }
         });
 
-        console.log('Response Status:', response.status);
-        console.log('Response Headers:', response.headers.get('content-type'));
         const responseBody = await response.text();
-        console.log('Response Body:', responseBody);
-
         if (response.headers.get("content-type")?.includes("application/json")) {
             const data = JSON.parse(responseBody);
-            console.log("Parsed Data:", data);
             return data;
         } else {
             throw new Error("La réponse n'est pas du JSON");
@@ -67,9 +64,28 @@ export async function fetchUserProfile(token) {
     }
 }
 
+//Fonction pour modifier les informations utilisateur
+export async function saveUserProfile(token, profileData) {
+    try{
+        const response = await fetch ('${baseURL}/profile',{
+            method : 'PUT',
+            headres : {
+                'Authorization' : `Bearer ${token}`,
+                'Content-Type' : `application/json`
+            },
+            body: JSON.stringify(profileData)
+        });
+
+        return await processResponse(response);
+    } catch (error) {
+        console.error('Error APi lors de la saygarde du profil :', error);
+        throw error;
+    }
+}
+
 
 // Fonction pour simuler la déconnexion de l'utilisateur
 export function logoutUser() {
-    console.log('Utilisateur déconnecté');
-    // Vous pouvez également gérer la déconnexion côté serveur si nécessaire
+    localStorage.removeItem('userToken');  // Supprime le token du stockage local
+    store.dispatch(logoutUser());
 }

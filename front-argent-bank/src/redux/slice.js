@@ -17,8 +17,6 @@ const authSlice = createSlice({
             state.isAuthenticated = true;
             state.error = null;
         },
-
-        // Assurez-vous que les autres reducers soient aussi à jour
         logoutUser(state) {
             state.username = null;
             state.token = null;
@@ -27,7 +25,7 @@ const authSlice = createSlice({
         },
         loginUserFailure(state, action) {
             state.error = action.payload;
-        },
+        }
     }
 });
 
@@ -41,31 +39,28 @@ const profileInitialState = {
 // Création d'un slice pour la gestion du profil utilisateur
 const profileSlice = createSlice({
     name: 'profile',
-    initialState: {
-        profile: null,
-        loading: false,
-        error: null
-    },
+    initialState: profileInitialState,
     reducers: {
         fetchProfileStart(state) {
             state.loading = true;
             state.error = null;
         },
         fetchProfileSuccess(state, action) {
-            console.log("Profile Data Received for Reducer:", action.payload); // Vérifier les données reçues
             state.profile = action.payload.body;
         },
         fetchProfileFailure(state, action) {
             state.error = action.payload;
             state.loading = false;
+        },
+        updateProfile(state, action) {
+            state.profile = {...state.profile, ...action.payload};
         }
     }
 });
 
-
 // Exportation des actions de chaque slice pour utilisation dans les composants
 export const { loginUserSuccess, loginUserFailure, logoutUser } = authSlice.actions;
-export const { fetchProfileStart, fetchProfileSuccess, fetchProfileFailure } = profileSlice.actions;
+export const { fetchProfileStart, fetchProfileSuccess, fetchProfileFailure, updateProfile } = profileSlice.actions;
 
 // Combinaison des reducers des différents slices en un seul reducer racine
 const rootReducer = combineReducers({

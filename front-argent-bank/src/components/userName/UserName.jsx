@@ -7,8 +7,6 @@ import "../userName/userName.scss";
 const UserName = ({ onEditClick }) => {
     const dispatch = useDispatch();
     const { profile } = useSelector(state => state.profile);
-    console.log("Profile in UserName Component:", profile);
-    
     const { token } = useSelector(state => state.auth);
 
     useEffect(() => {
@@ -16,7 +14,6 @@ const UserName = ({ onEditClick }) => {
             dispatch(fetchProfileStart());
             fetchUserProfile(token)
                 .then(data => {
-                    console.log(data);
                     dispatch(fetchProfileSuccess(data));
                 })
                 .catch(error => {
@@ -27,8 +24,7 @@ const UserName = ({ onEditClick }) => {
 
     return (
         <div className="userNameWrapper">
-            {/* Utilisez profile.firstName si l'objet profile contient un champ firstName */}
-            <h1>Welcome back {profile ? profile.firstName : "User"} !</h1>
+            <h1>Welcome back { profile ? <>{profile.firstName} <br/> {profile.lastName}</> : "User"} !</h1>
             <button className="edit-button" onClick={onEditClick}>Edit Name</button>
         </div>
     );
