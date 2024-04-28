@@ -21,22 +21,20 @@ export async function loginUser(credentials) {
         const processData = await processResponse(response);
         const { token } = processData.body;
 
-        if (!token) {
-            localStorage.setItem('userToken', token);  // Assurez-vous que 'userToken' est cohérent partout
+        if (token) {
+            localStorage.setItem('userToken', token);
             store.dispatch(loginUserSuccess({ token }));
+            return { token };
+        } else {
             throw new Error("Token manquant");
         }
-
-        // Dispatch l'action Redux avec seulement le token
-        store.dispatch(loginUserSuccess({ token }));
-
-        return { token };
     } catch (error) {
         console.error('Erreur API lors de la connexion :', error);
         store.dispatch(loginUserFailure(error.toString()));
         throw error;
     }
 }
+
 
 
 
@@ -67,22 +65,21 @@ export async function fetchUserProfile(token) {
 //Fonction pour modifier les informations utilisateur
 export async function saveUserProfile(token, profileData) {
     try{
-        const response = await fetch ('${baseURL}/profile',{
+        const response = await fetch(`${baseURL}/profile`,{
             method : 'PUT',
-            headres : {
+            headers : {
                 'Authorization' : `Bearer ${token}`,
-                'Content-Type' : `application/json`
+                'Content-Type' : 'application/json'
             },
             body: JSON.stringify(profileData)
         });
 
         return await processResponse(response);
     } catch (error) {
-        console.error('Error APi lors de la saygarde du profil :', error);
+        console.error('Erreur API lors de la sauvegarde du profil :', error);
         throw error;
     }
 }
-
 
 // Fonction pour simuler la déconnexion de l'utilisateur
 export function logoutUser() {
