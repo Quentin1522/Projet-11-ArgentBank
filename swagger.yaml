@@ -1,3 +1,4 @@
+#en-tête
 swagger: '2.0'
 info:
   title: Bank Argent API documentation
@@ -8,17 +9,19 @@ host: localhost:3001
 basePath: /api/v1
 schemes:
   - http
+
+#chemins et endpoints
 paths:
   /user/login:
     post:
       tags:
         - User Module
       summary: Login
-      description: API for Login
+      description: API endpoint for user authentication.
       parameters:
         - in: body
           name: body
-          description: Login Payload
+          description: Credentials needed for logging in.
           required: true
           schema:
             $ref: '#/definitions/Login'
@@ -26,112 +29,91 @@ paths:
         - application/json
       responses:
         '200':
-          description: Login Successfully
+          description: Login Successful, returns token.
           schema:
             $ref: '#/definitions/LoginResponse'
         '400':
-          description: Invalid Fields
+          description: Invalid credentials provided.
         '500':
           description: Internal Server Error
-  /user/signup:
-    post:
-      tags:
-        - User Module
-      summary: Signup
-      description: API for Signup
-      parameters:
-        - in: body
-          name: body
-          description: Signup Payload
-          required: true
-          schema:
-            $ref: '#/definitions/User'
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: Signup Successfully
-          schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
-          description: Invalid Fields
-        '500':
-          description: Internal Server Error
+
   /user/profile:
     post:
       security:
         - Bearer: []
       tags:
         - User Module
-      summary: User Profile API
-      description: API for fetching a user profile
-      #produces:
-       # - application/json
+      summary: Fetch User Profile
+      description: API for fetching a user's profile using a Bearer Token.
       responses:
         '200':
-          description: User profile retrieved successully
+          description: Profile retrieval successful.
           schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
-          description: Invalid Fields
+            $ref: '#/definitions/UserProfile'
+        '401':
+          description: Unauthorized access.
         '500':
           description: Internal Server Error
+
     put:
       security:
         - Bearer: []
       tags:
         - User Module
-      summary: User Profile API
-      description: API for updating a user profile
+      summary: Update User Profile
+      description: API for updating a user's profile using a Bearer Token.
       parameters:
         - in: body
           name: body
-          description: Update user profile attributes
+          description: Data to update in the user profile.
           required: true
           schema:
             $ref: '#/definitions/UserProfile'
-      produces:
-        - application/json
       responses:
         '200':
-          description: User profile retrieved successully
-          schema:
-            $ref: '#/definitions/ApiResponse'
+          description: Profile update successful.
         '400':
-          description: Invalid Fields
+          description: Invalid request format.
+        '401':
+          description: Unauthorized access.
         '500':
           description: Internal Server Error
+
+#Sécurité
 securityDefinitions:
   Bearer:
     type: apiKey
     name: Authorization
     in: header
+
+#Définitions
 definitions:
   User:
+    type: object
     properties:
       email:
         type: string
-        description: user email
+        example: user@example.com
       password:
         type: string
-        description: user password
+        example: "StrongP@ssw0rd"
       firstName:
         type: string
-        description: user first name
       lastName:
         type: string
-        description: user last name
       userName:
         type: string
-        description: user public name
+
   Login:
+    type: object
     properties:
       email:
         type: string
-        description: user email
+        example: user@example.com
       password:
         type: string
-        description: user password
+        example: "user_password"
+
   ApiResponse:
     type: object
     properties:
@@ -139,20 +121,23 @@ definitions:
         type: integer
       message:
         type: string
-      body:
-        type: object
-        properties:
-          id:
-            type: string
-          email:
-            type: string
+
   LoginResponse:
     type: object
     properties:
       token:
         type: string
+        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
   UserProfile:
     type: object
     properties:
+      email:
+        type: string
+        example: user@example.com
+      firstName:
+        type: string
+      lastName:
+        type: string
       userName:
         type: string
