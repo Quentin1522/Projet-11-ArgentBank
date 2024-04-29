@@ -1,59 +1,89 @@
-// Importation des utilitaires nécessaires
 import { createSlice, combineReducers } from '@reduxjs/toolkit';
 
 // État initial pour l'authentification
 const authInitialState = {
-    token: null,
-    isAuthenticated: false,
-    error: null
+    // Token d'authentification, initialement à null
+    token: null,         
+    // Statut d'authentification, false par défaut   
+    isAuthenticated: false,  
+    // S'il y a une erreur d'authentification, elle sera stockée ici
+    error: null              
 };
 
+// Création d'un slice pour la gestion de l'authentification
 const authSlice = createSlice({
+    // Nom du slice, utilisé dans les actions et le reducer
     name: 'auth',
-    initialState: authInitialState,
+    // Définition de l'état initial
+    initialState: authInitialState,  
     reducers: {
+        // Action pour gérer le succès de la connexion
         loginUserSuccess(state, action) {
-            state.token = action.payload.token;
-            state.isAuthenticated = true;
-            state.error = null;
+            // Stocke le token
+            state.token = action.payload.token;  
+            // Marque comme authentifié
+            state.isAuthenticated = true;     
+            // Efface les erreurs précédentes   
+            state.error = null;                 
         },
+        // Action pour gérer la déconnexion
         logoutUser(state) {
-            state.username = null;
-            state.token = null;
-            state.isAuthenticated = false;
-            state.error = null;
+            // Efface le token
+            state.token = null;         
+            // Marque comme non authentifié        
+            state.isAuthenticated = false;    
+            // Efface les erreurs précédentes  
+            state.error = null;                 
         },
+        // Action pour gérer l'échec de la connexion
         loginUserFailure(state, action) {
-            state.error = action.payload;
+            // Stocke l'erreur retournée
+            state.error = action.payload;       
         }
     }
 });
 
 // État initial pour le profil utilisateur
 const profileInitialState = {
-    profile: null,
-    loading: false,
-    error: null
+    // Données du profil utilisateur
+    profile: null,     
+    // Indicateur de chargement   
+    loading: false,   
+    // Erreur lors du chargement/mise à jour du profil    
+    error: null           
 };
 
 // Création d'un slice pour la gestion du profil utilisateur
 const profileSlice = createSlice({
-    name: 'profile',
-    initialState: profileInitialState,
+    name: 'profile', 
+    // État initial
+    initialState: profileInitialState,  
     reducers: {
+        // Action pour signaler le début du chargement du profil
         fetchProfileStart(state) {
-            state.loading = true;
-            state.error = null;
+            // Active l'indicateur de chargement
+            state.loading = true;  
+            // Réinitialise les erreurs
+            state.error = null;    
         },
+        // Action pour gérer le succès du chargement du profil
         fetchProfileSuccess(state, action) {
-            state.profile = action.payload.body;
+            // Met à jour les données du profil
+            state.profile = action.payload.body; 
+            // Désactive l'indicateur de chargement 
+            state.loading = false;                
         },
+        // Action pour gérer l'échec du chargement du profil
         fetchProfileFailure(state, action) {
-            state.error = action.payload;
-            state.loading = false;
+            // Stocke l'erreur
+            state.error = action.payload; 
+            // Désactive l'indicateur de chargement 
+            state.loading = false;         
         },
+        // Action pour mettre à jour le profil
         updateProfile(state, action) {
-            state.profile = {...state.profile, ...action.payload};
+            // Fusionne les nouvelles données avec l'existant
+            state.profile = {...state.profile, ...action.payload};  
         }
     }
 });
@@ -64,8 +94,11 @@ export const { fetchProfileStart, fetchProfileSuccess, fetchProfileFailure, upda
 
 // Combinaison des reducers des différents slices en un seul reducer racine
 const rootReducer = combineReducers({
-    auth: authSlice.reducer,
-    profile: profileSlice.reducer
+    // Reducer pour l'authentification
+    auth: authSlice.reducer,   
+    // Reducer pour le profil utilisateur  
+    profile: profileSlice.reducer 
 });
 
+// Exportation du reducer racine pour utilisation dans le store Redux
 export default rootReducer;

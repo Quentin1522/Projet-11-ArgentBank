@@ -1,36 +1,38 @@
 import "../user/user.scss";
+
+// Importation des hooks et composants nécessaires
 import { useState } from "react";
 import Header from "../../components/header/Header";
 import UserName from "../../components/userName/UserName";
-import signOut from "../../assets/sign-out.svg";
-import Account from "../../components/account/Account";
-import Footer from "../../components/footer/Footer";
-import EditName from "../../components/editName/editName";
+import signOut from "../../assets/sign-out.svg"; 
+import Account from "../../components/account/Account"; 
+import Footer from "../../components/footer/Footer"; 
+import EditName from "../../components/editName/editName"; 
 
-const User = ({accountData}) => {
-
-    //définition de l'état pour savoit si l'utilisateur est en mode édition ou non
+// Composant User qui accepte accountData comme prop pour les données de l'utilisateur
+const User = ({ accountData }) => {
+    // Utilisation du hook useState pour gérer l'état local de mode édition
     const [isEditing, setIsEditing] = useState(false);
 
-    //fonction pour basculer entre le mode édition et l'affichage du nom utilisateur
+    // Fonction pour basculer entre le mode édition et le mode visualisation
     const toggleEditClick = () => {
-        setIsEditing(!isEditing);
+        // Changer la valeur de isEditing à son opposé
+        setIsEditing(!isEditing); 
     }
 
     return (
         <div className="userWrapper">
-            {/*prop pour indiquer que le lien "SignOut" doit être */}
-            <Header imgSignOut={signOut} textSignOut="sign Out"/>
+            {/* Header avec l'icône et le texte pour se déconnecter */}
+            <Header imgSignOut={signOut} textSignOut="Sign Out"/>
 
             <div className="userContent">
-
-                {/*condition pour affihcer le composant "editName" ou "UserName" en fonction de l'état*/}   
-            {isEditing ? <EditName/> : <UserName onEditClick={toggleEditClick}/>}
+                {/* Affichage conditionnel : EditName si en mode édition, sinon UserName */}
+                {isEditing ? <EditName /> : <UserName onEditClick={toggleEditClick} />}
                 
-                {/*accountData en props*/}
-                <Account accountData={accountData}/>
+                {/* Affichage du composant Account avec les données du compte passées en props */}
+                <Account accountData={accountData} />
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 };
