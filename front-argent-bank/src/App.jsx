@@ -10,6 +10,7 @@ import FeaturesData from "./data/features.json";
 import Home from "../src/page/home/Home.jsx";  
 import SignIn from "../src/page/singIn/SignIn.jsx";  
 import User from "./page/user/User.jsx";  
+import PrivateRoute from './components/PrivateRoute.jsx';
 
 const App = () => {
   // Hook useDispatch pour permettre le dispatch d'actions Redux
@@ -26,11 +27,17 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home featuresData={FeaturesData} />} />  
-        <Route path="/signIn" element={<SignIn />} />  
-        <Route path="/user" element={<User accountData={AccountData} />} /> 
-      </Routes>
+<Routes>
+    <Route path="/" element={<Home featuresData={FeaturesData} />} />  
+    <Route path="/signIn" element={<SignIn />} />  
+    <Route path="/user" element={
+        <PrivateRoute>
+            <User accountData={AccountData} />
+        </PrivateRoute>
+    } /> 
+</Routes>
+
+
     </BrowserRouter>
   );
 };
