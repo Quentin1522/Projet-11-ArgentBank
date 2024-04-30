@@ -6,8 +6,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // Actions Redux pour gérer le succès de connexion
 import { loginUserSuccess, loginUserFailure } from './redux/slice';
 
-// Importation des styles
+import { fetchUserProfile } from './Api/api';
 import "./app.scss"; 
+
 
 // Importation des données statiques et des composants
 import AccountData from "./data/account.json";  
@@ -21,17 +22,20 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Récupération du token utilisateur depuis le stockage local
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    // Assurez-vous que la clé ici correspond à ce que vous avez utilisé dans l'API lors de la sauvegarde
+    const token = localStorage.getItem('userToken') || sessionStorage.getItem('userToken');
     if (token) {
-      // Si un token est trouvé, dispatch de l'action loginUserSuccess
-      dispatch(loginUserSuccess({ token }));
+        fetchUserProfile(token).then(userProfile => {
+            dispatch(loginUserSuccess({ user: userProfile, token }));
+        }).catch(err => {
+            console.error("Failed to fetch user profile:", err);
+            dispatch(loginUserFailure("Failed to fetch user profile."));
+        });
     } else {
-      // Optionnel : Gérer le cas où aucun token n'est trouvé
-      // Vous pourriez vouloir rediriger l'utilisateur vers la page de connexion ou afficher une notification
-      dispatch(loginUserFailure("No token found, please log in."));
+        dispatch(loginUserFailure("No token found, please log in."));
     }
-  }, [dispatch]);
+}, [dispatch]);
+
 
   return (
 <BrowserRouter>
