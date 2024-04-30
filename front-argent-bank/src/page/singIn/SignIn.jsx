@@ -1,6 +1,6 @@
 import { useState } from "react";
-import "../singIn/singIn.scss";
-import User from "../../assets/user.svg";
+import "../singIn/singIn.scss"; 
+import User from "../../assets/user.svg"; 
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loginUser as apiLoginUser, fetchUserProfile } from '../../Api/api';
@@ -8,35 +8,30 @@ import { loginUserSuccess } from '../../redux/slice';
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 
-// Composant SignIn pour la gestion des connexions utilisateurs
 const SignIn = () => {
+    // Hooks pour dispatcher des actions Redux et pour la navigation
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // Hooks d'état pour la gestion de l'interface de connexion
+    // Déclaration des états locaux pour gérer les entrées de formulaire et les messages d'erreur
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // Gère l'état de la checkbox "Remember me"
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
 
-    // Fonction appelée lors de la soumission du formulaire
+    // Gestionnaire de soumission du formulaire
     const onSubmit = async (event) => {
         event.preventDefault();
-        console.log("Tentative de connexion avec :", email, password);
-
         try {
-            // Appel API pour la connexion utilisateur
+            // login en utilisant l'API
             const response = await apiLoginUser({ email, password });
-            console.log("Réponse de connexion:", response);
             const { token } = response;
 
             if (!token) {
                 throw new Error("Token manquant");
             }
-            console.log("Token reçu:", token);
 
-            // Stockage du token en fonction de l'option "Remember Me"
+            // Stockage du token basé sur le souhait de l'utilisateur de se souvenir de la connexion
             if (rememberMe) {
                 localStorage.setItem('token', token);
             } else {
@@ -44,19 +39,14 @@ const SignIn = () => {
             }
 
             try {
-                // Récupération du profil utilisateur après connexion réussie
+                // Récupération et stockage du profil utilisateur
                 const userProfile = await fetchUserProfile(token);
                 dispatch(loginUserSuccess({ user: userProfile, token }));
             } catch (err) {
-                console.error("Erreur lors de la récupération du profil utilisateur :", err);
                 setError("Impossible de retrouver les détails de l'utilisateur.");
             }
-
-            // Redirection vers la page utilisateur
             navigate('/user');
         } catch (err) {
-            console.error("Échec de la connexion :", err);
-            // Gestion de l'affichage des erreurs de connexion
             setError(err.message || "L'adresse mail ou le mot de passe n'est pas correct.");
         }
     };
@@ -67,8 +57,10 @@ const SignIn = () => {
             <div className="formContainer">
                 <div className="formWrapper">
                     <h1>Sign In</h1>
+                    {/* Icône utilisateur au-dessus du formulaire */}
                     <img className="userIcon" src={User} alt="User icon" />
                     <form onSubmit={onSubmit}>
+                        {/* Champ de saisie pour l'email */}
                         <div className="input-wrapper">
                             <label htmlFor="email">Email</label>
                             <input
@@ -79,6 +71,7 @@ const SignIn = () => {
                                 required
                             />
                         </div>
+                        {/* Champ de saisie pour le mot de passe */}
                         <div className="input-wrapper">
                             <label htmlFor="password">Password</label>
                             <input
@@ -89,6 +82,7 @@ const SignIn = () => {
                                 required
                             />
                         </div>
+                        {/* Checkbox pour l'option "Se souvenir de moi" */}
                         <div className="checkbox-wrapper">
                             <input
                                 type="checkbox"
@@ -98,8 +92,10 @@ const SignIn = () => {
                             />
                             <label htmlFor="rememberMe">Remember me</label>
                         </div>
+                        {/* Bouton pour soumettre le formulaire */}
                         <button type="submit" className="sign-in-button">Sign In</button>
                     </form>
+                    {/* Affichage conditionnel des messages d'erreur */}
                     {error && <div className="errorForm">{error}</div>}
                 </div>
             </div>

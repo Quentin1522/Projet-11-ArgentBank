@@ -1,17 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './slice';
 
-// Tentez de récupérer le token stocké dans le localStorage
+// récupére le token stocké dans le localStorage et seesionStorage
 const tokenFromStorage = localStorage.getItem('token');
-const tokenFromSession = sessionStorage.getItem('token'); // Pour gérer également le sessionStorage
+const tokenFromSession = sessionStorage.getItem('token'); 
 
-const token = tokenFromStorage || tokenFromSession;  // Utilise sessionStorage si localStorage est vide
+// Utilise sessionStorage si localStorage est vide
+const token = tokenFromStorage || tokenFromSession;  
 
 // Définir l'état initial en fonction du token récupéré
 const preloadedState = {
   auth: {
     token: token,
-    isAuthenticated: !!token,  // Convertit la présence du token en valeur booléenne
+    isAuthenticated: !!token,
     error: null
   }
 }
@@ -19,7 +20,8 @@ const preloadedState = {
 // Création et configuration du Redux store avec l'état préchargé
 const store = configureStore({
     reducer: rootReducer,
-    preloadedState, // Passer l'état initial ici
+    // Passer l'état initial ici
+    preloadedState,
     devTools: process.env.NODE_ENV !== 'production'  
 });
 

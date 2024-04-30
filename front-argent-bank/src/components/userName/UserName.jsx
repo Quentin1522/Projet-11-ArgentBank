@@ -1,8 +1,6 @@
-// Importation des hooks de React et Redux
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-// Importation des fonctions d'appel d'API et des actions Redux
 import { fetchUserProfile } from '../../Api/api';
 import { fetchProfileStart, fetchProfileSuccess, fetchProfileFailure } from '../../redux/slice';
 import "../userName/userName.scss";
