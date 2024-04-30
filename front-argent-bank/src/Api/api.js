@@ -7,14 +7,19 @@ const baseURL = 'http://localhost:3001/api/v1/user';
 
 // Fonction pour traiter les réponses JSON des requêtes API
 async function processResponse(response) {
-    // Conversion de la réponse en JSON
-    const data = await response.json(); 
-    if (!response.ok) {
-        // Si la réponse n'est pas ok, une erreur est lancée avec le message d'erreur contenu dans la réponse
-        throw new Error(data.message || "Une erreur est survenue avec l'API");
+    const contentType = response.headers.get("content-type");
+
+    if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || `Erreur avec l'API. Status: ${response.status}`);
+        }
+        return data;
+    } else {
+        const errorHTML = await response.text(); // Pour obtenir le corps de la réponse non-JSON
+        console.error("Received non-JSON response:", errorHTML);
+        throw new Error("Expected JSON, got HTML.");
     }
-    // Retourne les données processées si tout va bien
-    return data; 
 }
 
 // Fonction asynchrone pour connecter un utilisateur avec ses credentials (identifiants)
@@ -77,24 +82,20 @@ export async function fetchUserProfile(token) {
     }
 }
 
-// Fonction pour modifier les inform données utilisateur
+// Fonction pour modifier les informations données utilisateur
 export async function saveUserProfile(token, profileData) {
-    try {
-        const response = await fetch(`${baseURL}/profile`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(profileData)
-        });
+    console.log("Sending token:", token);
+    console.log("Sending profile data:", JSON.stringify(profileData));
 
-        // Traitement de la réponse
-        return await processResponse(response); 
-    } catch (error) {
-        console.error('Erreur API lors de la sauvegarde du profil :', error);
-        throw error;
-    }
+    const response = await fetch(`${baseURL}/profile`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(profileData)
+    });
+    return await processResponse(response);
 }
 
 // Fonction pour simuler la déconnexion de l'utilisateur

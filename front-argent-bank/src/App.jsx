@@ -18,7 +18,7 @@ const App = () => {
 
   useEffect(() => {
     // Récupération du token utilisateur depuis le stockage local
-    const token = localStorage.getItem('userToken');
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
     // Si un token est trouvé, dispatch de l'action loginUserSuccess
     if (token) {
       dispatch(loginUserSuccess({ token }));

@@ -19,7 +19,7 @@ const Header = () => {
     const displaySignIn = location.pathname !== "/user";
 
     // Extraire le prénom de l'utilisateur pour l'affichage, si les données de profil sont disponibles
-    const username = profile ? `${profile.firstName}` : null;
+    const username = profile ? profile.userName : null;
 
     return (
         <div className="headerWrapper">

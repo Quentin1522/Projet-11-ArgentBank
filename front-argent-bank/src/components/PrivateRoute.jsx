@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
-import { Route, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Outlet } from 'react-router-dom';
 
 const PrivateRoute = ({ children }) => {
     const token = useSelector((state) => state.auth.token);

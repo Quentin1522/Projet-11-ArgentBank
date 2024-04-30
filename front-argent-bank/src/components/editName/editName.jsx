@@ -1,73 +1,85 @@
-import "../editName/editName.scss";
-import { useEffect, useState, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateProfile } from '../../redux/slice';  // Assurez-vous que l'action est correctement importée
-import { saveUserProfile } from "../../Api/api";
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { updateUserName } from '../../redux/slice';
+import { saveUserProfile } from '../../Api/api';
+import { createSelector } from 'reselect';
+import '../editName/editName.scss';
 
 const EditName = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const profile = useSelector(state => state.profile.profile);
 
-    // Initialisation des champs avec les valeurs actuelles du profil
-    const [firstName, setFirstName] = useState(profile ? profile.firstName : '');
+ const selectProfile = state => state.profile.profile;
+const selectAuth = state => state.auth;
 
-    // Synchronisation à l'état du profil dans Redux
+const selectUserName = createSelector(
+    [selectProfile],
+    (profile) => profile.userName
+);
+
+const selectToken = createSelector(
+    [selectAuth],
+    (auth) => auth.token
+);
+
+// Dans votre composant
+const userName = useSelector(selectUserName);
+const token = useSelector(selectToken);
+    
+    // useState pour gérer la nouvelle valeur du username localement
+    const [newUserName, setNewUserName] = useState(userName || '');
+
     useEffect(() => {
-        if (profile) {
-            setFirstName(profile.firstName);
+        // Mise à jour du state local lorsque le userName dans le Redux store change
+        if (userName) {
+            setNewUserName(userName);
         }
-    }, [profile]); 
+    }, [userName]);
 
-    // Gestionnaire pour les changements de l'input
-    const handleFirstNameChange = useCallback((event) => {
-        setFirstName(event.target.value);
-    }, []);
+    const handlesaveUserProfile = (e) => {
+        setNewUserName(e.target.value);
+    };
 
-    // Gestionnaire du formulaire
-    const handleSubmit = useCallback(async (event) => {
-        event.preventDefault();
-        const token = localStorage.getItem('userToken');
-        if (!token) {
-            console.error('No token found, please log in again.');
-            return;
-        }
+    const handleCancel = () => {
+        navigate("/user");
+    };
 
-        try {
-            // Save updated profile
-            const response = await saveUserProfile(token, { firstName });
-            if (response.status === 200) {
-                dispatch(updateProfile(response.body));  // Mise à jour du state Redux
-                console.log('Profile successfully updated:', response.body);
-            } else {
-                console.error('Failed to update profile:', response);
+    const handleForm = async (e) => {
+        e.preventDefault();
+        if (newUserName !== userName) {
+            try {
+                console.log("Final data sent to server:", JSON.stringify({userName: newUserName}));
+
+console.log("Using token:", token);
+
+await saveUserProfile(token, {userName: newUserName});
+
+                dispatch(updateUserName({userName: newUserName}));
+                console.log("Le nom d'utilisateur a bien été modifié.");
+                navigate("/user");
+            } catch (error) {
+                console.error("Erreur lors de la mise à jour du nom d'utilisateur:", error);
             }
-        } catch (error) {
-            console.error('Error while saving profile:', error);
+        } else {
+            navigate("/user");
         }
-    }, [firstName, dispatch]);
-
-    // Gestionnaire pour annuler les modifications
-    const handleCancel = useCallback(() => {
-        setFirstName(profile ? profile.firstName : '');  // Réinitialisation avec la valeur du state Redux
-    }, [profile]);
+    };
 
     return (
         <div className="editNameWrapper">
             <h3>Modifier les informations utilisateur</h3>
-            <form onSubmit={handleSubmit}>
-                <div className="inputContent">
-                    <label htmlFor="firstname">Prénom:</label>
-                    <input
-                        type="text"
-                        id="firstname"
-                        value={firstName}
-                        onChange={handleFirstNameChange}
-                    />
-                </div>
-                <div className="buttonContainer">
-                    <button type="submit" className="save">Enregistrer</button>
-                    <button type="button" className="cancel" onClick={handleCancel}>Annuler</button>
-                </div>
+            <form onSubmit={handleForm}>
+                <label htmlFor="username">Username:</label>
+                <input
+                    type="text"
+                    id="username"
+                    value={newUserName}
+                    onChange={handlesaveUserProfile}
+                    placeholder="Tapez votre nouveau username"
+                />
+                <button type="submit">Enregistrer</button>
+                <button type="button" onClick={handleCancel}>Annuler</button>
             </form>
         </div>
     );
