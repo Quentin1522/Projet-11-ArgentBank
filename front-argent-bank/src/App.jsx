@@ -5,8 +5,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Actions Redux pour gérer le succès de connexion
 import { loginUserSuccess, loginUserFailure } from './redux/slice';
-
-import { fetchUserProfile } from './Api/api';
 import "./app.scss"; 
 
 
@@ -22,19 +20,19 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Assurez-vous que la clé ici correspond à ce que vous avez utilisé dans l'API lors de la sauvegarde
-    const token = localStorage.getItem('userToken') || sessionStorage.getItem('userToken');
-    if (token) {
-        fetchUserProfile(token).then(userProfile => {
-            dispatch(loginUserSuccess({ user: userProfile, token }));
-        }).catch(err => {
-            console.error("Failed to fetch user profile:", err);
-            dispatch(loginUserFailure("Failed to fetch user profile."));
-        });
+    const rememberedToken = localStorage.getItem('userToken'); 
+    const sessionToken = sessionStorage.getItem('userToken'); 
+
+    if (!rememberedToken && sessionToken) {
+        dispatch(loginUserSuccess({ token: sessionToken }));
+    } else if (rememberedToken) {
+        // Si un token 'permanent' est trouvé
+        dispatch(loginUserSuccess({ token: rememberedToken }));
     } else {
         dispatch(loginUserFailure("No token found, please log in."));
     }
 }, [dispatch]);
+
 
 
   return (
