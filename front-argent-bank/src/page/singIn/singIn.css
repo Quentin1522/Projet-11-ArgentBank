@@ -21,6 +21,9 @@
   padding: 40px;
   background-color: #fff;
 }
+.signInWrapper .formContainer .formWrapper .checkbox-wrapper input {
+  margin-right: 10px;
+}
 .signInWrapper .formContainer .formWrapper .userIcon {
   width: 16px;
   margin-bottom: 20px;

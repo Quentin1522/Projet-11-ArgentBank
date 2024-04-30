@@ -15,6 +15,7 @@ const UserName = ({ onEditClick }) => {
     // Extraction des données de profil et du token depuis l'état global via useSelector
     const { profile } = useSelector(state => state.profile);
     const { token } = useSelector(state => state.auth);
+    const username = profile ? profile.userName : null;
 
     // Effet React qui s'exécute à la montée du composant ou lorsque le token change
     useEffect(() => {
@@ -36,7 +37,7 @@ const UserName = ({ onEditClick }) => {
 
     return (
         <div className="userNameWrapper">
-            <h1>Welcome back {profile ? <>{profile.firstName} <br/> {profile.lastName}</> : "User"} !</h1>
+            <h1>Welcome back {profile ? <>{profile.firstName} <br/> {username} </> : "User"} !</h1>
             <button className="edit-button" onClick={onEditClick}>Edit Name</button>
         </div>
     );
