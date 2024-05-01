@@ -115,7 +115,7 @@ export async function saveUserProfile(token, profileData) {
 export function logoutUser() {
     // Retrait du token du localStorage.
     localStorage.removeItem('userToken');
-    
+    sessionStorage.removeItem('userToken');
     // Dispatch de l'action de déconnexion.
     store.dispatch(logoutUser());
 }
