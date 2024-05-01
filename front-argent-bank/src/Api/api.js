@@ -117,5 +117,5 @@ export function logoutUser() {
     localStorage.removeItem('userToken');
     
     // Dispatch de l'action de déconnexion.
-    store.dispatch(logoutUser());  // Correction: devrait probablement être une autre action comme `logoutUserSuccess`
+    store.dispatch(logoutUser());
 }
